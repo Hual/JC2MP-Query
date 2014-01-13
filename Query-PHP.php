@@ -1,6 +1,6 @@
 <?php
 /*
-	JC2-MP server query function by King_Hual
+	PHP JC2-MP server query function by King_Hual
 	
 
 	Arguments:
