@@ -1,3 +1,22 @@
+/*
+	C++ Unix GNU JC2-MP server query function by King_Hual
+	
+
+	Arguments:
+
+	string address - The IP address
+	int port [optional] - The port
+
+	Methods:
+
+	update() - Updates the information
+	isErroneous() - Returns true if any errors occured, false otherwise
+	getHostName() - Returns the hostname of a server
+	getPlayers() - Returns the amount of players currently connected to the server
+	getMaxPlayers() - Returns the maximum amount of players that can be connected to the server
+
+*/
+
 #include "Query-CPP-Unix.hpp"
 
 JCMPQuery::JCMPQuery(std::string address, int port = 7777)
