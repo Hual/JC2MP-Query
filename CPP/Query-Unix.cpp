@@ -1,23 +1,4 @@
-/*
-	C++ Unix GNU JC2-MP server query function by King_Hual
-	
-
-	Arguments:
-
-	string address - The IP address
-	int port [optional] - The port
-
-	Methods:
-
-	update() - Updates the information
-	isErroneous() - Returns true if any errors occured, false otherwise
-	getHostName() - Returns the hostname of a server
-	getPlayers() - Returns the amount of players currently connected to the server
-	getMaxPlayers() - Returns the maximum amount of players that can be connected to the server
-
-*/
-
-#include "Query-Unix.hpp"
+#include "Query-CPP-Unix.hpp"
 
 JCMPQuery::JCMPQuery(std::string address, int port = 7777)
 {
@@ -62,8 +43,7 @@ bool JCMPQuery::update()
 	char rdata[256], tmpPort[11];
 	int sock, rv;
 	memset(rdata, 0, sizeof(rdata));
-	memset(&hints, 0, sizeof (hints));
-	memset(tmpPort, 0, sizeof(tmpPort));
+	memset(&hints, 0, sizeof(hints));
 	sprintf(tmpPort, "%d", this->_port);
 
 	hostent *record = gethostbyname(this->_address.c_str());
@@ -75,11 +55,11 @@ bool JCMPQuery::update()
 	struct timeval timeout;
 	timeout.tv_sec = 2;
 	timeout.tv_usec = 0;
-	for(p = servinfo; p != NULL; p = p->ai_next)
+	for(p=servinfo; p!=NULL; p=p->ai_next)
 	{
 		if ((sock = socket(p->ai_family, SOCK_DGRAM,0)) == -1)
 			continue;
-		setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char *)&timeout, sizeof(timeout));
+		setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&timeout, sizeof(timeout));
 		if (connect(sock, p->ai_addr, p->ai_addrlen) == -1)
 		{
 			close(sock);
@@ -102,24 +82,13 @@ bool JCMPQuery::update()
 	if(send(sock, sdata, sizeof(sdata), 0) == -1)
 		return (this->_error = true);
 	int recv_size = recv(sock, rdata, sizeof(rdata), 0);
+	close(sock);
 	if(recv_size < 6)
 		return (this->_error = true);
 
-	char data[2][64];
-	memset(data, 0, sizeof(data));
-
-	for(unsigned char i=6, j=0, lIndex=6;i<recv_size;++i)
-	{
-		if(rdata[i] == 0)
-		{
-			memcpy(data[j++], &rdata[lIndex], i-lIndex+1);
-			lIndex = i+1;
-			if(j == sizeof(data)/64)
-				break;
-		}
-	}
-	this->_hostname = (std::string)data[0];
-	this->_players = atoi(strtok(&data[1][9], "/"));
+	char *pi = &rdata[strcspn(rdata, "\0")+1];
+	this->_hostname = (std::string)&rdata[6];
+	this->_players = atoi(strtok(&pi[9], "/"));
 	this->_max_players = atoi(strtok(NULL, "/"));
 	return (this->_error = false);
 }
