@@ -44,7 +44,7 @@ public class JCMPQuery
 		this.initialize(address, 7777);
 	}
 	
-	public void initialize(String address, int port)
+	private void initialize(String address, int port)
 	{
 		this._address = address;
 		this._port = port;
