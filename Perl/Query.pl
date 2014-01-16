@@ -8,12 +8,12 @@ sub new
 	my $class = shift;
 	my $self =
 	{
-	address	=> shift,
-	port 	=> shift,
-	hostname => "",
-	players => -1,
-	max_players => -1,
-	error => 1
+		address	=> shift,
+		port 	=> shift,
+		hostname => "",
+		players => -1,
+		max_players => -1,
+		error => 1
 	};
 	bless $self, $class;
 	$self->update();
