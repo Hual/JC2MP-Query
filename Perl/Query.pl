@@ -1,4 +1,5 @@
 =begin legal
+
         	Perl JC2-MP server query function by King_Hual, Djole1337
         
 
@@ -15,7 +16,6 @@
         getPlayers() - Returns the amount of players currently connected to the server
         getMaxPlayers() - Returns the maximum amount of players that can be connected to the server
 
-*/
 =cut
 
 package JCMPQuery;
